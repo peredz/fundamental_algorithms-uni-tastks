@@ -58,6 +58,22 @@ public:
             cur_el->next = new Node(value, cur_el->next);
         }
     }
+
+    void clear(){
+        if (root == nullptr){
+            return;
+        }
+        Node* cur_el = root->next;
+        Node* cur_el_next = cur_el->next;
+        while (cur_el != root)
+        {
+            delete cur_el;
+            cur_el = cur_el_next;
+            cur_el_next = cur_el_next->next;
+        }
+        delete root;
+        root = nullptr;
+    }
     
     void print(){
         if (root == nullptr){
@@ -81,6 +97,9 @@ public:
         root = nullptr;
     }
 
+    ~List(){
+        clear();
+    }
 };
 
 int main(){
@@ -90,5 +109,7 @@ int main(){
         if (i % 2 == 0) lst.add(i);
         else lst.add(i + 10);
     }
+    lst.print();
+    lst.clear();
     lst.print();
 }
