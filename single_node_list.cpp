@@ -19,10 +19,8 @@ private:
 
     void delete_next_element(Node * prev_el){
         if (root == nullptr) throw std::logic_error("delete element from empty list");
-    
-        Node* cur_el = prev_el->next;
 
-        if (cur_el == root){
+        if (prev_el->next == root){
             if (root->next == root)
             {
                 delete root;
@@ -30,19 +28,16 @@ private:
                 return;
             }
 
-            while (cur_el->next != root){
-                cur_el = cur_el->next;
-            }
-            cur_el->next = root->next;
-            cur_el = root;
-            root = root->next;
-            delete cur_el;
+            prev_el->next = root->next;
+            delete root;
+            root = prev_el->next;
         }
 
         else 
         {
-            prev_el->next = cur_el->next;
-            delete cur_el;
+            Node* to_delete = prev_el->next;
+            prev_el->next = prev_el->next->next;
+            delete to_delete;
         }
     }
 
@@ -90,6 +85,11 @@ public:
     }
 
     void delete_elements_by_value(int value){
+        if (root == nullptr)
+        {
+            std:: cout << "ERROR: delete element from empty list\n\r";
+            return;
+        };
         int counter {0};
         Node* cur_el = root;
         while (cur_el->next != root){
@@ -97,7 +97,7 @@ public:
                 counter++;
                 delete_next_element(cur_el);
             }
-            cur_el = cur_el->next;
+            else cur_el = cur_el->next;
         }
         if (root->data == value){
             counter++;
@@ -107,6 +107,30 @@ public:
             std::cout << "No such element\n\r";
         }
     }
+
+    // void delete_prev_element_by_value(int value){
+    //     if (root == nullptr)
+    //     {
+    //         std:: cout << "ERROR: delete element from empty list\n\r";
+    //         return;
+    //     };
+    //     int counter {0};
+    //     Node* cur_el = root;
+    //     while (cur_el->next != root){
+    //         if (cur_el->next->next->data == value){
+    //             counter++;
+    //             delete_next_element(cur_el);
+    //         }
+    //         cur_el = cur_el->next;
+    //     }
+    //     if (root->next->data == value){
+    //         counter++;
+    //         delete_next_element(cur_el);
+    //     }
+    //     if (counter == 0){
+    //         std::cout << "No such element\n\r";
+    //     }
+    // }
 
     void clear(){
         if (root == nullptr){
@@ -155,14 +179,26 @@ int main(){
     List lst;
     lst.print();
     for (int i = 0; i < 10; i++){
-        if (i % 2 == 0) lst.add(i);
-        else lst.add(i + 10);
+        if (i % 2 == 0) {lst.add(i); lst.add(i);}
+        else {lst.add(i + 10); lst.add(i + 10);} 
     }
     lst.print();
     lst.delete_elements_by_value(0);
     lst.delete_elements_by_value(19);
     lst.delete_elements_by_value(4);
     lst.delete_elements_by_value(2);
+    lst.add(11);
+    lst.print();
+    lst.delete_elements_by_value(11);
     lst.delete_elements_by_value(12);
     lst.print();
+    // lst.add(11);
+    // lst.delete_prev_element_by_value(11);
+    // lst.print();
+    // lst.delete_prev_element_by_value(11);
+    // lst.print();
+    // lst.delete_prev_element_by_value(17);
+    // lst.print();
+    // lst.delete_prev_element_by_value(14);
+    // lst.print();
 }
