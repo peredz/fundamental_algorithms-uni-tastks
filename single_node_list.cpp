@@ -131,6 +131,26 @@ public:
         else std::cout << "Removed elements before each occurrence " << value << std::endl;
     }
 
+    void find_elements(int value){
+        if (root == nullptr)
+        {
+            std:: cout << "no such element in the list\n\r";
+            return;
+        };
+        
+        int counter {0};
+        Node* cur_el = root;
+        while (cur_el->next != root){
+            if (cur_el->data == value) counter++;
+            cur_el = cur_el->next;
+        }
+        if (cur_el->data == value) counter++;
+        
+        if (counter == 0) std::cout << "no such element in the list\n\r";
+        else if (counter == 1) std::cout << "there is one " << value << " in the list\n\r";
+        else std::cout << "there are " << counter << " " << value << "'s in the list\n\r";
+    }
+
     void clear(){
         if (root == nullptr){
             return;
@@ -204,4 +224,8 @@ int main(){
     lst.print();
     lst.delete_prev_element_by_value(11);
     lst.print();
+    lst.find_elements(5);
+    lst.find_elements(11);
+    lst.find_elements(13);
+    lst.find_elements(17);
 }
