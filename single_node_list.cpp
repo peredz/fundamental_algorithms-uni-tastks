@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 
 struct Node
@@ -41,6 +42,21 @@ private:
             delete to_delete;
         }
     }
+
+    int find_divisors(int num)
+    {
+        int counter {0};
+        num = abs(num);
+
+        for (int i{2}; i < num; i++){
+            if (num % i == 0) counter++;
+        }
+
+
+        return counter;
+    }
+
+
 
 public:
     void add(int value){
@@ -167,9 +183,9 @@ public:
         root = nullptr;
     }
     
-    void print(){
+    void print(std::string sep = "\n\r"){
         if (root == nullptr){
-            std::cout << "empty list\n\r";
+            std::cout << "empty list" << sep;
             return;
         }
         Node* cur_el = root;
@@ -178,7 +194,93 @@ public:
             std::cout << cur_el->data << " ";
             cur_el = cur_el->next;
         }
-        std::cout << cur_el->data << std::endl;        
+        std::cout << cur_el->data << sep;        
+    }
+
+    void print_with_divisors(std::string sep = "\n\r"){
+        if (root == nullptr){
+            std::cout << "empty list" << sep;
+            return;
+        }
+        Node* cur_el = root;
+        while (cur_el->next != root)
+        {
+            std::cout << cur_el->data << "(" << find_divisors(cur_el->data) << ") ";
+            cur_el = cur_el->next;
+        }
+
+        std::cout << cur_el->data << "(" << find_divisors(cur_el->data) << ") " << sep;        
+    }
+
+    List merge(List lst){
+        List new_list;
+
+        if (lst.root == nullptr){
+            if (root = nullptr){
+                return new_list;
+            }
+            return this->create_copy();
+        }
+
+        if (root = nullptr){
+            return new_list;
+        }
+
+        Node* cur_el = lst.root;
+        new_list.add(cur_el->data);
+        while (cur_el->next != lst.root ){
+            cur_el = cur_el->next;
+            new_list.add(cur_el->data);
+        }
+
+        cur_el = root;
+        new_list.add(cur_el->data);
+        while (cur_el->next != root ){
+            cur_el = cur_el->next;
+            new_list.add(cur_el->data);
+        }
+        // new_list.print();
+        return new_list;
+    }
+
+    List divisors_control()
+    {
+        List new_list;
+        Node* cur_el = root;
+
+        if (root == nullptr){
+            return new_list;
+        }
+
+        if (find_divisors(cur_el->data) > 3)
+        {
+            new_list.add(cur_el->data);
+        }
+
+        cur_el = cur_el->next;
+        while (cur_el != root ){
+            if (find_divisors(cur_el->data) > 3) new_list.add(cur_el->data);
+            cur_el = cur_el->next;
+        }
+
+        return new_list;
+    }
+
+    List create_copy(){
+        List new_lst;
+        Node * cur_el = root;
+        if (root == nullptr)
+        {
+            return new_lst;
+        }
+
+        while (cur_el->next != root)
+        {
+            new_lst.add(cur_el->data);
+            cur_el = cur_el->next;
+        } 
+        new_lst.add(cur_el->data);
+        return new_lst;
     }
 
     List(int value){
@@ -194,7 +296,7 @@ public:
     }
 };
 
-int main(){
+void some_tests(){
     List lst;
     lst.print();
     for (int i = 0; i < 10; i++){
@@ -228,4 +330,26 @@ int main(){
     lst.find_elements(11);
     lst.find_elements(13);
     lst.find_elements(17);
+    List second_lst;
+    for (int i = 0; i < 10; i++) second_lst.add(i * -1);
+    lst.print();
+    second_lst.print();
+    List merged_list;
+    merged_list = lst.merge(second_lst);
+    merged_list.print();
+}
+
+
+int main(){
+    List lst;
+    for (int i{-30}; i < 30; i++){
+        lst.add(i);
+    }
+    lst.print_with_divisors();
+
+    List lst_with_4p_divs = lst.divisors_control();
+    std::cout << std::endl;
+    lst_with_4p_divs.print_with_divisors();
+    lst = lst.merge(lst_with_4p_divs);
+    lst.print();
 }
