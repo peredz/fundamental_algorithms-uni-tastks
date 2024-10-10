@@ -1,22 +1,20 @@
 #include <iostream>
-#include <cmath>
-
-
-struct Node
-{
-    int data;
-    Node* next;
-
-    Node(int value, Node* next_node){
-        data = value;
-        next = next_node;
-    }
-};
-
 
 class List
 {
 private:
+
+    struct Node
+    {
+        int data;
+        Node* next;
+    
+        Node(int value, Node* next_node){
+            data = value;
+            next = next_node;
+        }
+    };
+
     Node* root;
 
     void delete_next_element(Node * prev_el){
